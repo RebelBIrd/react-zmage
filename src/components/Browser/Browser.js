@@ -33,6 +33,7 @@ export default class Browser extends React.PureComponent {
             show: false,
             // 缩放
             zoom: false,
+            zoomCount: 1,
             // 旋转
             rotate: 0,
             // 页数
@@ -80,7 +81,7 @@ export default class Browser extends React.PureComponent {
             window.addEventListener('keydown', this.handleKeyDown)
             window.addEventListener('scroll', this.handleScroll)
             window.requestAnimationFrame(() => {
-                this.setState({ show:true, zoom:false, rotate:0, }, () => {
+                this.setState({ show:true, zoom: false, rotate:0, }, () => {
                     pageIsCover && hideCover(coverRef, set, page)
                     !isControlled && typeof onBrowsing === "function" && onBrowsing(true)
                 })
@@ -94,7 +95,7 @@ export default class Browser extends React.PureComponent {
             window.removeEventListener('keydown', this.handleKeyDown)
             window.removeEventListener('scroll', this.handleScroll)
             !pageIsCover && showCover(coverRef, set, page)
-            this.setState({ show:false, zoom:false, rotate:0 }, () => setTimeout(() => {
+            this.setState({ show:false, zoom: false, rotate:0 }, () => setTimeout(() => {
                 this.setState({ mount:false }, () => {
                     pageIsCover && showCover(coverRef, set, page)
                     !isControlled && typeof onBrowsing === "function" && onBrowsing(false)
@@ -123,7 +124,7 @@ export default class Browser extends React.PureComponent {
             case 32: // SpaceBar
                 // 缩放
                 e.preventDefault()
-	            hotKey.zoom && this.handleToggleZoom()
+	            // hotKey.zoom && this.handleToggleZoom()
                 break
             case 37: // ArrowLeft
                 // 上一张
@@ -179,11 +180,37 @@ export default class Browser extends React.PureComponent {
      * 缩放控制
      **/
     handleToggleZoom = () => {
-        const { onZooming } = this.props
+        // const { onZooming } = this.props
+        // this.setState({
+        //     zoom: !this.state.zoom
+        // }, () => {
+        //     typeof onZooming === "function" && onZooming(this.state.zoom)
+        // })
+    }
+    /**
+     * 放大
+     **/
+    handleToggleZoomIn = () => {
+        const { zoomCount, onZooming } = this.state
+        console.log('放大', zoomCount)
+        if (zoomCount >= 3) return
         this.setState({
-            zoom: !this.state.zoom
+            zoomCount: zoomCount + 0.25
         }, () => {
-            typeof onZooming === "function" && onZooming(this.state.zoom)
+            typeof onZooming === "function" && onZooming(this.state.zoomCount)
+        })
+    }
+    /**
+     * 缩小
+     **/
+    handleToggleZoomOut = () => {
+        const { zoomCount, onZooming } = this.state
+        console.log('缩小', zoomCount)
+        if (zoomCount <= 0.25) return
+        this.setState({
+            zoomCount: zoomCount - 0.25
+        }, () => {
+            typeof onZooming === "function" && onZooming(this.state.zoomCount)
         })
     }
 
@@ -227,10 +254,11 @@ export default class Browser extends React.PureComponent {
             mount,
             // Status
             show, zoom, rotate, page, pageIsCover, pageWithStep,
+            zoomCount
         } = this.state
 
         const defProp = defPropWithEnv(preset)
-        const statusValue = { show, zoom, rotate, page, pageIsCover, pageWithStep }
+        const statusValue = { show, zoom, rotate, page, pageIsCover, pageWithStep, zoomCount }
 
         const contextValue = {
             // Internal
@@ -255,6 +283,8 @@ export default class Browser extends React.PureComponent {
             toNextPage: this.handleToNextPage,
             toggleZoom: this.handleToggleZoom,
             toggleRotate: this.handleToggleRotate,
+            toggleZoomIn: this.handleToggleZoomIn,
+            toggleZoomOut: this.handleToggleZoomOut
         }
 
         return (

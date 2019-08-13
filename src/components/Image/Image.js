@@ -189,7 +189,7 @@ export default class Image extends React.PureComponent {
         })
     }
     getStyle = (step) => {
-        const { animate, set, zoom, page } = this.context
+        const { animate, set, zoomCount, page } = this.context
         const { invalidate, currentStyle } = this.state
         // 获取动画配置
         let offset=0, overflow=0, transform, clipPath, zIndex, opacity, pointerEvents
@@ -217,11 +217,11 @@ export default class Image extends React.PureComponent {
         }
         return {
             ...withVendorPrefix({ transform }),
-            cursor: zoom ? 'zoom-out' : 'initial',
             zIndex,
             opacity: invalidate ? 0 : opacity,
             pointerEvents,
             ...set[page].style,
+            width: `${80 * zoomCount}rem`,
         }
     }
 
@@ -233,7 +233,8 @@ export default class Image extends React.PureComponent {
         return rangeList.map(i => this.buildImage(i))
     }
     buildImage = (step) => {
-        const { loop, set, show, zoom, page, pageWithStep } = this.context
+        const { loop, set, show, zoom, page, pageWithStep, zoomCount } = this.context
+        console.log('zoomCount', zoomCount)
         const { invalidate } = this.state
         // 是否邊圖
         const isSideImage = Math.abs(step)>0
@@ -244,7 +245,7 @@ export default class Image extends React.PureComponent {
             // 計算樣式
             const imageStyle = this.getStyle(step)
             const imageClass = classnames(style.imageLayer, set[imageIndex].className, {
-                [style.zooming]: zoom,
+                // [style.zooming]: zoom,
                 [style.invalidate]: invalidate,
             })
             // 組裝屬性
@@ -261,11 +262,11 @@ export default class Image extends React.PureComponent {
                 onLoad: this.handleImageLoad,
                 onError: this.handleImageError,
                 onAbort: this.handleImageAbort,
-                onClick: this.handleClick,
+                // onClick: this.handleClick,
             }
             // 構建内容
             if (isSideImage) {
-                const sideImageShow = show && set.length>1 && !zoom
+                const sideImageShow = show && set.length>1
                 return sideImageShow && <img {...commonProps}/>
             } else {
                 return <img {...commonProps} {...centerProps}/>

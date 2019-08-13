@@ -8,7 +8,7 @@ import React, { Fragment } from 'react'
 // Style
 import style from './Control.less'
 // Asserts
-import { IconDownload, IconRotateLeft, IconRotateRight, IconZoom, IconArrowLeft, IconArrowRight, IconClose } from '@/asserts/icons'
+import { IconDownload, IconRotateLeft, IconRotateRight, IconZoomIn, IconZoomOut, IconArrowLeft, IconArrowRight, IconClose } from '@/asserts/icons'
 // Utils
 import { Context } from '../context'
 import { withShowingStatus, downloadFromLink } from '@/utils'
@@ -17,7 +17,7 @@ export default class Control extends React.PureComponent {
 
     withShow = (className) => {
         const { show, zoom } = this.props
-        return withShowingStatus(className, !zoom && show, style.show)
+        return withShowingStatus(className, show, style.show)
     }
 
     render() {
@@ -34,7 +34,7 @@ export default class Control extends React.PureComponent {
             // Styles & interactive
             backdrop, loop,
             // Status
-            zoom, page,
+            zoomCount, page,
             // Action
             outBrowsing,
             toPage,
@@ -42,6 +42,8 @@ export default class Control extends React.PureComponent {
             toNextPage,
             toggleZoom,
             toggleRotate,
+            toggleZoomIn,
+            toggleZoomOut,
         } = this.context
 
         return (
@@ -76,6 +78,38 @@ export default class Control extends React.PureComponent {
                         </div>
                     }
 
+                    
+
+                    {/*缩小*/}
+                    {
+                        true &&
+                        <div
+                            id="zmageControlZoom"
+                            className={this.withShow(style.zoom)}
+                            onClick={presetIsMobile ? ()=>window.open(set[page].src) : toggleZoomOut}
+                        >
+                            <IconZoomOut/>
+                        </div>
+                    }
+                    {
+                        true &&
+                        <div
+                            style={{ display: 'flex', alignItems: 'center' }}
+                        >
+                        {`${zoomCount * 100}%`}
+                        </div>
+                    }
+                    {/*放大*/}
+                    {
+                        true &&
+                        <div
+                            id="zmageControlZoom"
+                            className={this.withShow(style.zoom)}
+                            onClick={presetIsMobile ? ()=>window.open(set[page].src) : toggleZoomIn}
+                        >
+                            <IconZoomIn/>
+                        </div>
+                    }
                     {/*下载*/}
                     {
                         controller.download &&
@@ -87,26 +121,13 @@ export default class Control extends React.PureComponent {
                             <IconDownload/>
                         </div>
                     }
-
-                    {/*放大*/}
-                    {
-                        controller.zoom &&
-                        <div
-                            id="zmageControlZoom"
-                            className={this.withShow(style.zoom)}
-                            onClick={presetIsMobile ? ()=>window.open(set[page].src) : toggleZoom}
-                        >
-                            <IconZoom/>
-                        </div>
-                    }
-
                     {/*关闭*/}
                     {
                         controller.close &&
                         <div
                             id="zmageControlClose"
                             className={this.withShow(style.close)}
-                            onClick={zoom ? toggleZoom : outBrowsing}
+                            onClick={outBrowsing}
                         >
                             <IconClose/>
                         </div>

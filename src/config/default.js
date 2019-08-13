@@ -136,14 +136,14 @@ export const defPreset = {
         controller: {
             pagination: true,
             rotate: true,
-            zoom: true,
+            zoom: false,
             download: false,
             close: true,
             flip: true,
         },
         hotKey: {
             close: true,
-            zoom: true,
+            zoom: false,
             flip: true,
         },
         animate: {
