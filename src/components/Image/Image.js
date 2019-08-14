@@ -234,7 +234,6 @@ export default class Image extends React.PureComponent {
     }
     buildImage = (step) => {
         const { loop, set, show, zoom, page, pageWithStep, zoomCount } = this.context
-        console.log('zoomCount', zoomCount)
         const { invalidate } = this.state
         // 是否邊圖
         const isSideImage = Math.abs(step)>0

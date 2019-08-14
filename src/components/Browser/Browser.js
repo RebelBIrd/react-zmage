@@ -192,7 +192,6 @@ export default class Browser extends React.PureComponent {
      **/
     handleToggleZoomIn = () => {
         const { zoomCount, onZooming } = this.state
-        console.log('放大', zoomCount)
         if (zoomCount >= 3) return
         this.setState({
             zoomCount: zoomCount + 0.25
@@ -205,7 +204,6 @@ export default class Browser extends React.PureComponent {
      **/
     handleToggleZoomOut = () => {
         const { zoomCount, onZooming } = this.state
-        console.log('缩小', zoomCount)
         if (zoomCount <= 0.25) return
         this.setState({
             zoomCount: zoomCount - 0.25

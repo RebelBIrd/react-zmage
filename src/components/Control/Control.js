@@ -94,7 +94,7 @@ export default class Control extends React.PureComponent {
                     {
                         true &&
                         <div
-                            style={{ display: 'flex', alignItems: 'center' }}
+                            style={{ display: 'flex', alignItems: 'center', WebkitUserSelect: 'none', userSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none'}}
                         >
                         {`${zoomCount * 100}%`}
                         </div>
